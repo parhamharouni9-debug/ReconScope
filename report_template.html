@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>ReconScope | __RS_TARGET__</title>
+  <style>
+    :root {
+      --ink: #15263e;
+      --muted: #61728a;
+      --line: #e4eaf1;
+      --panel: #fff;
+      --canvas: #f4f7fb;
+      --navy: #12233d;
+      --blue: #3f7fe7;
+      --cyan: #54c7dc;
+      --soft: #edf4ff;
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { margin: 0; background: var(--canvas); color: var(--ink); font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+    .top { background: linear-gradient(125deg,#10213a 0%,#173558 72%,#1b5570 100%); color: #fff; padding: 38px 24px 74px; }
+    .wrap { width: min(1060px,100%); margin: 0 auto; }
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 750; letter-spacing: .15px; }
+    .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid #ffffff35; border-radius: 12px; background: #ffffff13; color: #85dcef; font-weight: 800; letter-spacing: -.6px; }
+    .eyebrow { margin: 34px 0 8px; text-transform: uppercase; letter-spacing: 2px; font-size: 11px; font-weight: 750; color: #93dced; }
+    h1 { font-size: clamp(29px,5vw,43px); line-height: 1.16; letter-spacing: -1.25px; margin: 0 0 10px; font-weight: 780; }
+    .subtitle { color: #c0d2e8; max-width: 660px; margin: 0; font-size: 15px; }
+    main { margin: -42px auto 55px; position: relative; }
+    .overview { display: grid; grid-template-columns: 1.6fr 1.3fr .8fr; gap: 1px; border: 1px solid var(--line); border-radius: 15px; overflow: hidden; background: var(--line); box-shadow: 0 9px 35px #152c4612; }
+    .metric { background: #fff; padding: 23px 27px; min-width: 0; }
+    .metric-label { font-size: 11px; text-transform: uppercase; font-weight: 750; letter-spacing: 1.35px; color: var(--muted); }
+    .metric-value { display: block; margin-top: 7px; font-size: clamp(17px,2.6vw,23px); line-height: 1.25; font-weight: 730; overflow-wrap: anywhere; }
+    .metric-number { font-size: 33px; color: #276cd4; letter-spacing: -1.2px; }
+    .sheet { background: var(--panel); border: 1px solid var(--line); border-radius: 15px; overflow: hidden; margin-top: 22px; box-shadow: 0 8px 30px #152c4608; }
+    .sheet-head { display: flex; justify-content: space-between; align-items: end; gap: 14px; flex-wrap: wrap; padding: 26px 28px 22px; }
+    h2 { margin: 0; font-size: 19px; letter-spacing: -.4px; }
+    .sheet-head p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .small-pill { background: var(--soft); color: #235eb5; border: 1px solid #d9e8ff; padding: 5px 11px; border-radius: 99px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .table-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; table-layout: fixed; }
+    thead { background: #f7f9fc; }
+    th { font-size: 11px; color: #61718a; letter-spacing: 1.15px; text-transform: uppercase; font-weight: 750; padding: 14px 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    td { padding: 18px 28px; vertical-align: top; border-bottom: 1px solid #edf1f5; overflow-wrap: anywhere; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .col-port { width: 18%; }
+    .col-service { width: 24%; }
+    .port-num { display: inline-block; padding: 4px 10px; border-radius: 8px; background: #eaf3ff; color: #2364bb; font-weight: 750; font-variant-numeric: tabular-nums; }
+    .service { font-weight: 720; color: #243952; }
+    .desc { color: #52647b; line-height: 1.66; }
+    .empty { text-align: center; padding: 32px; color: var(--muted); }
+    .notice { display: flex; align-items: start; gap: 12px; padding: 16px 19px; background: #f5f9ff; border: 1px solid #dce9fb; border-radius: 12px; margin-top: 22px; color: #47607b; font-size: 13px; }
+    .notice-icon { width: 23px; height: 23px; display: grid; place-items: center; flex: 0 0 23px; background: #e0ecff; color: #2f6ac1; border-radius: 50%; font-weight: 800; }
+    .notice p { margin: 0; }
+    footer { display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; align-items: center; color: #7e8ca1; font-size: 12px; margin-top: 30px; }
+    .mono { font-variant-numeric: tabular-nums; }
+    @media (max-width: 680px) {
+      .top { padding: 28px 18px 64px; }
+      main { padding: 0 14px; }
+      .overview { grid-template-columns: 1fr 1fr; }
+      .metric { padding: 18px; }
+      .metric:first-child { grid-column: 1 / -1; }
+      .sheet-head { padding: 20px; }
+      table { min-width: 560px; }
+      th, td { padding: 14px 18px; }
+      .notice { padding: 14px; }
+      footer { padding: 0 4px; }
+    }
+    @media print {
+      @page { margin: 15mm; }
+      body { background: #fff; font-size: 12px; }
+      .top { padding: 18px 0 54px; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      main { margin-top: -35px; margin-bottom: 10px; }
+      .overview, .sheet { box-shadow: none; }
+      tr { break-inside: avoid; }
+      .notice { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">R.</span> ReconScope</div>
+      <div class="eyebrow">Network reconnaissance</div>
+      <h1>Network Scan Report</h1>
+      <p class="subtitle">A clear overview of reachable TCP ports and the services commonly associated with them.</p>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="overview" aria-label="Scan overview">
+      <div class="metric"><div class="metric-label">Target</div><span class="metric-value">__RS_TARGET__</span></div>
+      <div class="metric"><div class="metric-label">Resolved IPv4</div><span class="metric-value mono">__RS_IP__</span></div>
+      <div class="metric"><div class="metric-label">Open TCP ports</div><span class="metric-value metric-number">__RS_COUNT__</span></div>
+    </section>
+    <section class="sheet" aria-labelledby="results-title">
+      <div class="sheet-head">
+        <div><h2 id="results-title">Discovered services</h2><p>Scan completed on __RS_DATE__</p></div>
+        <span class="small-pill">TCP Connect Scan</span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th scope="col" class="col-port">Port</th><th scope="col" class="col-service">Service</th><th scope="col">What it usually does</th></tr></thead>
+          <tbody>
+            __RS_PORT_ROWS__
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <aside class="notice"><span class="notice-icon" aria-hidden="true">i</span><p><strong>How to interpret this report:</strong> Service names and descriptions are informational. A port number alone does not prove which application is running, and an open port does not by itself indicate a vulnerability. This report documents results from an authorized assessment.</p></aside>
+    <footer><span>ReconScope • Local, shareable report</span><span>Generated __RS_DATE__</span></footer>
+  </main>
+</body>
+</html>
